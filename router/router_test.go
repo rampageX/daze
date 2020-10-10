@@ -73,6 +73,19 @@ L c.com *.c.com
 `
 	r := NewRouterRule()
 	r.FromReader(bytes.NewReader([]byte(data)))
+	if r.Choose("a.com") != Daze {
+		t.FailNow()
+	}
+	if r.Choose("b.com") != Fucked {
+		t.FailNow()
+	}
+	if r.Choose("c.com") != Direct {
+		t.FailNow()
+	}
+	if r.Choose("d.com") != Puzzle {
+		t.FailNow()
+	}
+
 	if r.Choose("a.a.com") != Daze {
 		t.FailNow()
 	}

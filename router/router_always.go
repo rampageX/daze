@@ -1,10 +1,16 @@
 package router
 
-import (
-	"net"
-)
+// RouterAlways always choose the same road.
+type RouterAlways struct {
+	Road Road
+}
 
-// NewRouterAlways always choose the same road.
-func NewRouterAlways(road Road) *RouterIPNet {
-	return NewRouterIPNet([]*net.IPNet{}, Puzzle, road)
+// Choose.
+func (r *RouterAlways) Choose(host string) Road {
+	return r.Road
+}
+
+// NewRouterAlways returns a new RouterAlways.
+func NewRouterAlways(road Road) *RouterAlways {
+	return &RouterAlways{Road: road}
 }

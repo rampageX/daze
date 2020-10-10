@@ -11,7 +11,10 @@ import (
 )
 
 // NewRouterApnic returns a new RouterApnic.
-func NewRouterApnic(f io.Reader) *RouterIPNet {
+// Pass the file in as a stream: http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest
+func NewRouterApnic(f io.Reader, region string) *RouterIPNet {
+	ipv4Prefix := fmt.Sprintf("apnic|%s|ipv4", region)
+	ipv6Prefix := fmt.Sprintf("apnic|%s|ipv6", region)
 	r := []*net.IPNet{}
 	s := bufio.NewScanner(f)
 	for s.Scan() {
@@ -20,7 +23,7 @@ func NewRouterApnic(f io.Reader) *RouterIPNet {
 			continue
 		}
 		switch {
-		case strings.HasPrefix(line, "apnic|CN|ipv4"):
+		case strings.HasPrefix(line, ipv4Prefix):
 			seps := strings.Split(line, "|")
 			sep4, err := strconv.Atoi(seps[4])
 			if err != nil {
@@ -32,7 +35,7 @@ func NewRouterApnic(f io.Reader) *RouterIPNet {
 				panic(err)
 			}
 			r = append(r, cidr)
-		case strings.HasPrefix(line, "apnic|CN|ipv6"):
+		case strings.HasPrefix(line, ipv6Prefix):
 			seps := strings.Split(line, "|")
 			sep4 := seps[4]
 			_, cidr, err := net.ParseCIDR(fmt.Sprintf("%s/%s", seps[3], sep4))

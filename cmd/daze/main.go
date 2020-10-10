@@ -90,7 +90,7 @@ func main() {
 					panic(err)
 				}
 				defer f.Close()
-				routerApnic := router.NewRouterApnic(f)
+				routerApnic := router.NewRouterApnic(f, "CN")
 				log.Println("find", len(routerApnic.Blocks), "IP nets")
 				routerCompose.Join(routerApnic)
 			}
