@@ -10,7 +10,7 @@ import (
 	"github.com/mohanson/daze"
 	"github.com/mohanson/daze/protocol/ashe"
 	"github.com/mohanson/daze/router"
-	"github.com/mohanson/res"
+	"github.com/mohanson/easyfs"
 )
 
 const help = `usage: daze <command> [<args>]
@@ -27,7 +27,7 @@ func main() {
 		fmt.Println(help)
 		os.Exit(0)
 	}
-	res.BaseExec()
+	easyfs.BaseExec()
 	subCommand := os.Args[1]
 	os.Args = os.Args[1:len(os.Args)]
 	switch subCommand {
@@ -53,7 +53,7 @@ func main() {
 			flServer = flag.String("s", "127.0.0.1:1081", "server address")
 			flCipher = flag.String("k", "daze", "cipher, for encryption")
 			flFilter = flag.String("f", "ipcn", "filter {ipcn, none}")
-			flRulels = flag.String("r", res.Path(daze.Conf.PathRule), "rule path")
+			flRulels = flag.String("r", easyfs.Path(daze.Conf.PathRule), "rule path")
 			flDnserv = flag.String("dns", "", "such as 8.8.8.8:53")
 		)
 		flag.Parse()
@@ -85,7 +85,7 @@ func main() {
 
 			if *flFilter == "ipcn" {
 				log.Println("load rule CN(China PR) CIDRs")
-				f, err := daze.OpenFile(res.Path(daze.Conf.PathDelegatedApnic))
+				f, err := daze.OpenFile(easyfs.Path(daze.Conf.PathDelegatedApnic))
 				if err != nil {
 					panic(err)
 				}
